@@ -1,0 +1,78 @@
+ul li {
+    line-height: 2em;
+}
+h1, h2, h3 {
+    /*background-color: white;*/
+    color : rgb(0, 0, 0);
+    
+}
+h1:hover, h2:hover, h3:hover {
+    background-color: rgb(248, 255, 199);
+}
+body {
+    background-color: rgb(191, 180, 157);
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.4em;
+    text-align: center;
+    border-top: 10px solid black;
+}
+title:focus {
+    background-color: rgb(255, 214, 255);
+}   
+title:hover {
+    color:rgb(61, 22, 61);
+}
+p {
+    /*background-color: white;*/
+    color : rgb(0, 0, 0);
+}
+/* em {
+    color : rgb(50, 100, 200);
+} */
+ul {
+    background-color: white;
+    /* color : rgb(50, 100, 200); */
+}
+ol {
+    background-color: white;
+    /* color :rgb(50, 100, 200); */
+}
+/* strong {
+    color :rgb(50, 100, 200);
+} */
+#educationInfo {
+    background-color: white;
+}
+.songLyrics {
+    background-color: white;
+    width: 70%;
+    height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+        /* top, right, bottom, left */
+    /* margin: 65px, 0px, 0px, 0px; */
+    margin: auto;
+    /* margin-top: 65px; */
+    /* font-family: "Arial", monospace; */
+    border : 2px dashed grey;
+    /* float:right; */
+    /* clear:both; */
+
+}
+.background {
+    background-color: white;
+    /* font-family: "Arial", monospace; */
+}
+.action {
+    cursor:pointer;
+    padding:10px;
+    margin-left: 10px;
+}
+.action:hover {
+    background-color: #00A5D2;
+    color: white;
+}
+.container {
+    padding:40px;
+}

@@ -1,0 +1,125 @@
+/* Reset some default styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Global styles */
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    background-color: #000;
+    color: #fff;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+nav ul {
+    list-style-type: none;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #007acc;
+}
+
+/* Main content styles */
+h1, h2, h3 {
+    color: #fff;
+}
+
+section {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 10px;
+    background-color: #000;
+    color: #fff;
+}
+
+/* Link styles */
+a {
+    color: #007acc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Space-themed background */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('photos/space-background.jpeg') center center no-repeat;
+    background-size: cover;
+    opacity: 0.4;
+    z-index: -1;
+}
+
+/* Additional Page Background */
+body.additional::before {
+    background: url('photos/space-background.jpeg') no-repeat;
+    background-size: cover;
+}
+
+/* Images */
+.movie-poster {
+    display: block;
+    margin: 0 auto;
+    max-width:700px; 
+    height: auto;
+}
+
+.character-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 700px; 
+    height: auto;
+}
+
+.behind-the-scenes-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 600px; 
+    height: auto;
+}
