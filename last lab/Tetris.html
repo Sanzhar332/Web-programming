@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+
+        canvas {
+            border: 1px solid #fff;
+        }
+
+        #welcome-screen,
+        #game-over-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+        }
+
+        #welcome-screen button,
+        #game-over-screen button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #game-over-screen {
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="welcome-screen">
+    <h1>Welcome to Tetris</h1>
+    <label for="username">Enter your username:</label>
+    <input type="text" id="username" placeholder="Username" />
+    <button onclick="startGame()">Start Game</button>
+</div>
+
+<div id="game-over-screen">
+    <h1>Game Over</h1>
+    <p id="final-score">Your final score: 0</p>
+    <p id="final-username">Username: Guest</p>
+    <button onclick="restartGame()">Restart</button>
+</div>
+
+<canvas id="tetrisCanvas" width="300" height="600"></canvas>
+
+<script>
+    const canvas = document.getElementById('tetrisCanvas');
+    const context = canvas.getContext('2d');
+
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const gameOverScreen = document.getElementById('game-over-screen');
+    const usernameInput = document.getElementById('username');
+    const finalScoreText = document.getElementById('final-score');
+    const finalUsernameText = document. getElementById('final-username');
+
+    const ROWS = 20;
+    const COLUMNS = 10;
+    const BLOCK_SIZE = 30;
+    const board = Array.from({ length: ROWS }, () => Array(COLUMNS).fill(0));
+
+    const shapes = [
+        [[1, 1, 1, 1]],
+        [[1, 1, 1], [1]],
+        [[1, 1, 1], [0, 0, 1]],
+        [[1, 1, 1], [0, 1]],
+        [[1, 1, 1], [1, 0]],
+        [[1, 1], [1, 1]]
+    ];
+
+    const colors = [
+        '#ff0000', // Red
+        '#00ff00', // Green
+        '#0000ff', // Blue
+        '#ffff00', // Yellow
+        '#ff00ff', // Magenta
+        '#00ffff'  // Cyan
+    ];
+
+    let currentShape, currentColor, currentRow, currentColumn;
+    let intervalId, score, username;
+
+    function getRandomShape() {
+        const randomIndex = Math.floor(Math.random() * shapes.length);
+        return shapes[randomIndex];
+    }
+
+    function getRandomColor() {
+        const randomIndex = Math.floor(Math.random() * colors.length);
+        return colors[randomIndex];
+    }
+
+    function drawBlock(row, col, color) {
+        context.fillStyle = color;
+        context.fillRect(col * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        context.strokeRect(col * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+    }
+
+    function drawBoard() {
+        for (let row = 0; row < ROWS; row++) {
+            for (let col = 0; col < COLUMNS; col++) {
+                if (board[row][col]) {
+                    drawBlock(row, col, 'white');
+                }
+            }
+        }
+    }
+
+    function drawShape() {
+        for (let row = 0; row < currentShape.length; row++) {
+            for (let col = 0; col < currentShape[row].length; col++) {
+                if (currentShape[row][col]) {
+                    drawBlock(currentRow + row, currentColumn + col, currentColor);
+                }
+            }
+        }
+    }
+
+    function clearBoard() {
+        for (let row = 0; row < ROWS; row++) {
+            for (let col = 0; col < COLUMNS; col++) {
+                board[row][col] = 0;
+            }
+        }
+    }
+
+    function moveDown() {
+        currentRow++;
+        if (checkCollision()) {
+            currentRow--;
+            placeShape();
+            clearLines();
+            if (checkGameOver()) {
+                showGameOverScreen();
+                return;
+            }
+            currentShape = getRandomShape();
+            currentColor = getRandomColor();
+            currentRow = 0;
+            currentColumn = Math.floor(COLUMNS / 2) - Math.floor(currentShape[0].length / 2);
+        }
+    }
+
+    function moveLeft() {
+        currentColumn--;
+        if (checkCollision()) {
+            currentColumn++;
+        }
+    }
+
+    function moveRight() {
+        currentColumn++;
+        if (checkCollision()) {
+            currentColumn--;
+        }
+    }
+
+    function rotate() {
+        const originalShape = currentShape;
+        currentShape = currentShape[0].map((_, i) => currentShape.map(row => row[i])).reverse();
+        if (checkCollision()) {
+            currentShape = originalShape;
+        }
+    }
+
+    function checkCollision() {
+        for (let row = 0; row < currentShape.length; row++) {
+            for (let col = 0; col < currentShape[row].length; col++) {
+                if (
+                    currentShape[row][col] &&
+                    (board[currentRow + row] && board[currentRow + row][currentColumn + col]) !== 0
+                ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function placeShape() {
+        for (let row = 0; row < currentShape.length; row++) {
+            for (let col = 0; col < currentShape[row].length; col++) {
+                if (currentShape[row][col]) {
+                    board[currentRow + row][currentColumn + col] = 1;
+                }
+            }
+        }
+    }
+
+    function clearLines() {
+        for (let row = ROWS - 1; row >= 0; row--) {
+            if (board[row].every(cell => cell)) {
+                board.splice(row, 1);
+                board.unshift(Array(COLUMNS).fill(0));
+                score += 10;
+                updateScore();
+            }
+        }
+    }
+
+    function updateScore() {
+        finalScoreText.textContent = `Your score: ${score}`;
+    }
+
+    function showGameOverScreen() {
+        finalScoreText.textContent = `Your final score: ${score}`;
+        finalUsernameText.textContent = `Username: ${username}`;
+        gameOverScreen.style.visibility = 'visible';
+    }
+
+    function startGame() {
+        username = usernameInput.value.trim();
+        if (username === '') {
+            alert('Please enter your username.');
+            return;
+        }
+
+        welcomeScreen.style.visibility = 'hidden';
+        canvas.style.visibility = 'visible';
+
+        clearBoard();
+        score = 0;
+        updateScore();
+
+        currentShape = getRandomShape();
+        currentColor = getRandomColor();
+        currentRow = 0;
+        currentColumn = Math.floor(COLUMNS / 2) - Math.floor(currentShape[0].length / 2);
+
+        intervalId = setInterval(() => {
+            moveDown();
+            draw();
+        }, 500);
+
+        draw();
+    }
+
+    function restartGame() {
+        welcomeScreen.style.visibility = 'visible';
+        gameOverScreen.style.visibility = 'hidden';
+        canvas.style.visibility = 'hidden';
+        clearInterval(intervalId);
+        usernameInput.value = '';
+    }
+
+    function checkGameOver() {
+        return (
+            board[0].some(cell => cell) ||
+            board[1].some(cell => cell)
+        );
+    }
+
+    function draw() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawBoard();
+        drawShape();
+        context.fillText(`Score: ${score}`, 15, 30);
+        context.fillText(`Username: ${username}`, canvas.width - 100, 30);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'ArrowDown') {
+            moveDown();
+        } else if (e.code === 'ArrowLeft') {
+            moveLeft();
+        } else if (e.code === 'ArrowRight') {
+            moveRight();
+        } else if (e.code === 'ArrowUp') {
+            rotate();
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Indicator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #loading-indicator {
+            text-align: center;
+        }
+
+        #loading-text {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #loading-progress {
+            width: 200px;
+            height: 20px;
+            border: 1px solid #ccc;
+            position: relative;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #4caf50;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+
+<div id="loading-indicator">
+    <p id="loading-text">Loading...</p>
+    <div id="loading-progress">
+        <div id="progress-bar"></div>
+    </div>
+</div>
+
+
+
+<script>
+    function updateProgressBar() {
+        var progressBar = document.getElementById("progress-bar");
+        var loadingText = document.getElementById("loading-text");
+        var percent = 1;
+
+        var interval = setInterval(function() {
+            progressBar.style.width = percent + "%";
+            loadingText.innerHTML = "Loading... " + percent + "%";
+
+            if (percent >= 100) {
+                loadingText.innerHTML = "All downloaded!";
+                clearInterval(interval);
+            }
+
+            percent++;
+        }, 1000 / 15); // 15 seconds
+    }
+
+    window.addEventListener('load', function() {
+        updateProgressBar();
+    });
+</script>
+
+</body>
+</html>

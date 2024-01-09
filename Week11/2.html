@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #quiz-container {
+            width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <h2>JavaScript Quiz</h2>
+
+    <div id="question-container" class="question"></div>
+
+    <div id="options-container"></div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            question: "Who have 8 Baloon D'ors",
+            options: ["Ronaldo", "Haaland", "Messi", "Platini"],
+            correctAnswer: "Messi"
+        },
+        {
+            question: "Which programming language is known as the 'language of the web'?",
+            options: ["Java", "Python", "JavaScript", "C++"],
+            correctAnswer: "JavaScript"
+        },
+        {
+            question: "What is the capital of France?",
+            options: ["Paris", "Berlin", "London", "Madrid"],
+            correctAnswer: "Paris"
+        },
+        {
+            question: "What is the capital of Kazakhstan?",
+            options: ["Almaty", "Astana", "Shymkent", "Taldykorgan"],
+            correctAnswer: "Astana"
+        },
+        {
+            question: "Who is the best teacher",
+            options: ["Mustafaeva", "Mukhsimbaev", "Aldamuratov", "Abylkhozhyn"],
+            correctAnswer: "Mustafaeva"
+        },
+        {
+            question: "Which planet is known as the 'Red Planet'?",
+            options: ["Venus", "Earth", "Mars", "Jupiter"],
+            correctAnswer: "Mars"
+        },
+        {
+            question: "Who wrote 'Romeo and Juliet'?",
+            options: ["Charles Dickens", "William Shakespeare", "Mark Twain"],
+            correctAnswer: "William Shakespeare"
+        },
+        {
+            question: "In which planet we are living now?",
+            options: ["Saturn", "Pluton", "Earth", "Uran"],
+            correctAnswer: "Earth"
+        },
+    ];
+
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+
+    function loadQuestion() {
+        const questionContainer = document.getElementById("question-container");
+        const optionsContainer = document.getElementById("options-container");
+
+        const currentQuizData = quizData[currentQuestion];
+
+        questionContainer.textContent = currentQuizData.question;
+
+        optionsContainer.innerHTML = "";
+
+        currentQuizData.options.forEach((option, index) => {
+            const button = document.createElement("button");
+            button.textContent = option;
+            button.onclick = () => checkAnswer(option);
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    function checkAnswer(selectedOption) {
+        const currentQuizData = quizData[currentQuestion];
+
+        if (selectedOption === currentQuizData.correctAnswer) {
+            alert("Correct!");
+            correctAnswers++;
+        } else {
+            alert("Incorrect!");
+        }
+
+        currentQuestion++;
+
+        if (currentQuestion < quizData.length) {
+            loadQuestion();
+        } else {
+            alert(`Quiz completed! You got ${correctAnswers} correct out of ${quizData.length} questions.`);
+        }
+    }
+
+    window.addEventListener('load', loadQuestion);
+</script>
+
+</body>
+</html>
